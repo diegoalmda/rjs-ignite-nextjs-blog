@@ -71,7 +71,15 @@ export default function Home({ postsPagination }: HomeProps) {
               <div className={styles.details}>
                 <div className={styles.details_container}>
                   <FiCalendar />
-                  <span>{result.first_publication_date}</span>
+                  <span>
+                    {format(
+                      parseISO(result.first_publication_date),
+                      'dd MMM yyyy',
+                      {
+                        locale: ptBR,
+                      }
+                    ).toString()}
+                  </span>
                 </div>
                 <div className={styles.details_container}>
                   <FiClock />
@@ -102,19 +110,15 @@ export const getStaticProps: GetStaticProps = async () => {
     pageSize: 3,
   });
 
-  const results = postsResponse.results.map(post => {
-    return {
-      ...post,
-      uid: post.uid,
-      first_publication_date: format(parseISO(post.first_publication_date), 
-        "dd MMM yyyy", {
-          locale: ptBR,
-        }
-      ).toString(),
-    }
-  })
+  // const results = postsResponse.results.map(post => {
+  //   return {
+  //     ...post,
+  //     uid: post.uid,
+  //     first_publication_date: post.first_publication_date
+  //   }
+  // })
 
-  const postsPagination = {...postsResponse, results}
+  const postsPagination = {...postsResponse}
   
   // console.log(JSON.stringify(postsPagination, null, 2))
   // console.log('PAGINATION ', postsPagination.next_page)
